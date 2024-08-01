@@ -1,39 +1,55 @@
+import { insertionSort, insertionSortSweep } from "./insertionSort.js"
+import { selectionSortSweep, selectionSort } from "./selectionSort.js"
+
 const canvas = document.getElementById("canvas")
 const startButton = document.getElementById("start-button")
-let ctx = canvas.getContext("2d")
+const algorithmSelect = document.getElementById("algorithm")
+const shuffleButton = document.getElementById("reset")
 
-const numbers = randomArray(500)
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
+
+let ctx = canvas.getContext("2d")
+let pixels = canvas.width
+
+export let numbers = randomArray(pixels)
 
 drawArray(numbers)
 startButton.addEventListener("click", () => {
     startButton.disabled = true
-    pixelSort(0, 0)
+    // selectionSortSweep(0, 0)
+    // selectionSort()
+    console.debug(algorithmSelect.value)
+    switch (algorithmSelect.value) {
+        case "selection":
+            selectionSort()
+            break
+        case "insertion":
+            console.debug(insertionSort())
+            break
+        default:
+            break
+    }
+    // insertionSort()
+    drawArray(numbers)
 })
 
-function pixelSort(i = 0, j = 0) {
-    if (j >= numbers.length) {
-        i++
-        j = i
-    }
-    if (numbers[i] > numbers[j]) {
-        let temp = numbers[i]
-        numbers[i] = numbers[j]
-        numbers[j] = temp
-    } else {
-    }
-    if (i >= numbers.length) return
+window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+    pixels = canvas.width
+    shuffle()
+})
 
-    // console.log(i, j, numbers)
-
-    drawArray(numbers, i, j)
-
-    // requestAnimationFrame(() => pixelSort(i, j + 1))
-    setTimeout(() => {
-        pixelSort(i, j + 1)
-    }, 1e-1000)
+shuffleButton.addEventListener("click", () => {
+    shuffle()
+})
+function shuffle() {
+    numbers = randomArray(pixels)
+    drawArray(numbers)
 }
 
-function drawArray(array, i = 0, j = 0) {
+export function drawArray(array, i = 0, j = 0) {
     const pixelWidth = canvas.width / array.length
     const pixelHeight = canvas.height / largest(array)
 
@@ -44,8 +60,15 @@ function drawArray(array, i = 0, j = 0) {
         const start = pixelWidth * index
         ctx.fillStyle =
             (i == index || j == index) && i != array.length - 1
-                ? "red"
+                ? i == j
+                    ? "green"
+                    : "red"
                 : "white"
+
+        if (index > j && index < i) ctx.fillStyle = "red"
+        if (i == array.length - 1) {
+            startButton.disabled = false
+        }
         ctx.fillRect(start, canvas.height, pixelWidth, -pixelHeight * number)
     })
 }

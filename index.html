@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="script.js" defer></script>
+    <script type="module" src="./script.js"></script>
 </head>
-<body>
-    <canvas id="canvas" width="1920" height="1080" style="border: 1px solid black; width: 100%; background-color: black;"></canvas>
-    <button id="start-button">START</button>
+<body style="margin: 0;">
+    <canvas id="canvas" width="1920" height="1080" style="border: 1px solid black;  height: 100vh; background-color: black;"></canvas>
+    <button id="start-button">Start</button>
+    <select name="algorithms" id="algorithm">
+        <option value="selection">Selection</option>
+        <option value="insertion">Insertion</option>
+    </select>
+    <button id="reset">Shuffle</button>
 </body>
 </html>
